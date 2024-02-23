@@ -1,0 +1,22 @@
+{
+  "name": "gamelibrary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasNavajas/GameLibrary.git"
+  },
+  "author": "Lucas Navajas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasNavajas/GameLibrary/issues"
+  },
+  "homepage": "https://github.com/LucasNavajas/GameLibrary#readme",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

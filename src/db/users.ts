@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, {Schema, Document} from "mongoose";
+import { ILibrary } from "./libraries";
 
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true},
@@ -7,8 +8,20 @@ const UserSchema = new mongoose.Schema({
         password:{type:String, required : true, select:false},
         salt: {type: String, select: false},
         sessionToken: {type: String, select:false}
-   }
+   },
+   library: { type: Schema.Types.ObjectId, ref: 'Library' }
 });
+
+export interface IUser extends Document {
+    username: string;
+    email: string;
+    authentication: {
+        password: string;
+        salt: string;
+        sessionToken: string;
+    };
+    library: ILibrary['_id'];
+}
 
 export const UserModel = mongoose.model("User", UserSchema);
 

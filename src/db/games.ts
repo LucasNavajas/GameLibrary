@@ -33,6 +33,11 @@ export interface IGame extends Document {
 
 export const GameModel = mongoose.model<IGame>("Game", GameSchema);
 
+export const CreateGame = async (values: Record<string, any>) => {
+    const game = await new GameModel(values).save();
+
+    return game.toObject();
+};
 export const getGames = () => GameModel.find();
 export const getGameById = (id: string) => GameModel.findById(id);
 export const updateGameById = (id: string, values: Record<string, any>) => GameModel.findByIdAndUpdate(id, values);

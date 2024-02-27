@@ -43,7 +43,7 @@ export const register = async (req: express.Request, res: express.Response) =>{
         const{ email, password, username } = req.body;
 
         if(!email || !password || !username){
-            return res.sendStatus(400);
+            return res.sendStatus(400).json({ message: "Missing required fields" });;
         }
 
         const existingUser = await getUserByEmail(email);

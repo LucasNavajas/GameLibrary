@@ -30,11 +30,16 @@ export const getUserByEmail = (email: string) => UserModel.findOne({ email });
 export const getUserBySessionToken = (sessionToken: string) => UserModel.findOne({
     "authentication.sessionToken": sessionToken,
 });
-export const getUserById = (id: string) => UserModel.findById(id);
+export const getUserById = (id: string) => UserModel.findById(id).populate('library');
 export const createUser = async (values: Record<string, any>) => {
-    const user = await new UserModel(values).save();
+    const user = new UserModel(values);
+    await user.save();
 
-    await new LibraryModel({ user: user._id }).save();
+    const library = new LibraryModel({ user: user._id });
+    await library.save(); 
+
+    user.library = library._id; 
+    await user.save(); 
 
     return user.toObject();
 };

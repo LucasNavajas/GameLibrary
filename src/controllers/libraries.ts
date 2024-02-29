@@ -8,7 +8,7 @@ export const getLibraryGames = async (req: express.Request, res: express.Respons
 
         const games = await getGames(id);
 
-        return res.sendStatus(200).json(games);
+        return res.status(200).json(games);
     } catch(error){
         console.log(error);
         return res.sendStatus(400);

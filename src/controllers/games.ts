@@ -3,7 +3,7 @@ import express from "express";
 import {CreateGame, getGames, getGameById, deleteGameById, getGamesByGenre, getGamesByMinimumAge, getGamesFromDateBackwards, getGamesFromDateOnwards, getMultiplayerGames, getSingleplayerGames } from "../db/games";
 
 
-const newGame = async (req: express.Request, res: express.Response) =>{
+export const newGame = async (req: express.Request, res: express.Response) =>{
     const { title, genre, releaseDate, description, multiplayer, picture, minimumAge } = req.body;
 
     if (!title || !genre || !releaseDate || !description || multiplayer === undefined || !minimumAge) {
@@ -22,7 +22,8 @@ const newGame = async (req: express.Request, res: express.Response) =>{
 
 export const getAllGames = async (req: express.Request, res: express.Response) =>{
     try{
-        return await getGames();
+        const games = await getGames();
+        res.status(200).json(games);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -34,7 +35,7 @@ export const getGame = async (req: express.Request, res: express.Response) =>{
 
         const game = await getGameById(id);
 
-        return res.sendStatus(200).json(game);
+        return res.status(200).json(game);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -46,7 +47,7 @@ export const deleteGame = async (req: express.Request, res: express.Response) =>
 
         const game = await deleteGameById(id);
 
-        return res.sendStatus(200).json(game);
+        return res.status(200).json(game);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -58,7 +59,7 @@ export const getGamesGenre = async (req: express.Request, res: express.Response)
 
         const game = await getGamesByGenre(id);
 
-        return res.sendStatus(200).json(game);
+        return res.status(200).json(game);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -71,7 +72,7 @@ export const getGameMinimumAge = async (req: express.Request, res: express.Respo
 
         const games = await getGamesByMinimumAge(numericAge);
 
-        return res.sendStatus(200).json(games);
+        return res.status(200).json(games);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -82,7 +83,7 @@ export const getGameMultiplayer = async (req: express.Request, res: express.Resp
 
         const games = await getMultiplayerGames();
 
-        return res.sendStatus(200).json(games);
+        return res.status(200).json(games);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -93,33 +94,33 @@ export const getGameSingleplayer = async (req: express.Request, res: express.Res
 
         const games = await getSingleplayerGames();
 
-        return res.sendStatus(200).json(games);
+        return res.status(200).json(games);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
     }
 }
-export const getGamePrevDate = async (req: express.Request, res: express.Response) =>{
-    try{
-        const { date } = req.params;
+export const getGamePrevDate = async (req: express.Request, res: express.Response) => {
+    try {
+        const { date } = req.body;
         const queryDate = new Date(date);
         const games = await getGamesFromDateBackwards(queryDate);
-
-        return res.sendStatus(200).json(games);
-    } catch(error){
+        return res.status(200).json(games);
+    } catch (error) {
         console.log(error);
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
-}
-export const getGamePostDate = async (req: express.Request, res: express.Response) =>{
-    try{
-        const { date } = req.params;
+};
+
+export const getGamePostDate = async (req: express.Request, res: express.Response) => {
+    try {
+        const { date } = req.body;
         const queryDate = new Date(date);
         const games = await getGamesFromDateOnwards(queryDate);
 
-        return res.sendStatus(200).json(games);
-    } catch(error){
+        return res.status(200).json(games);
+    } catch (error) {
         console.log(error);
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
-}
+};

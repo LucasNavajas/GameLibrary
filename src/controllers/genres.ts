@@ -1,6 +1,17 @@
 import express from "express";
 
-import { GetGenreById, CreateGenre, DeleteGenreById } from "../db/genres";
+import { GetGenreById, CreateGenre, DeleteGenreById, GetGenres } from "../db/genres";
+
+export const getAllGenres = async (req: express.Request, res: express.Response) =>{
+    try{
+        const genres = await GetGenres();
+
+        return res.status(200).json(genres);
+    } catch(error){
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
 
 export const createGenre = async (req: express.Request, res: express.Response) => {
     const { name } = req.body;
@@ -24,7 +35,7 @@ export const getGenre = async (req: express.Request, res:express.Response) =>{
 
         const genre = await GetGenreById(id);
 
-        return res.sendStatus(200).json(genre);
+        return res.status(200).json(genre);
     } catch(error){
         console.log(error);
         res.sendStatus(400);
@@ -37,7 +48,7 @@ export const deleteGenre = async (req: express.Request, res: express.Response) =
 
         const genre = await DeleteGenreById(id);
 
-        return res.sendStatus(200).json(genre);
+        return res.status(200).json(genre);
     } catch(error){
         console.log(error);
         res.sendStatus(400);

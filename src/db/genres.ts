@@ -9,6 +9,7 @@ export interface IGenre extends Document{
 }
 
 export const GenreModel = mongoose.model<IGenre>("Genre", GenreSchema);
+export const GetGenres = () => GenreModel.find();
 export const GetGenreById = (id: string) => GenreModel.findById(id);
 export const CreateGenre = async (name : string) => { 
     const genre = await new GenreModel({ name }).save();

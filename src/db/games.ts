@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document} from "mongoose";
-import { IGenre } from "./genres";
+import { IGenre, GenreModel } from "./genres";
 
 const GameSchema = new mongoose.Schema({
     title: {type: String, required: true},
@@ -22,6 +22,7 @@ const GameSchema = new mongoose.Schema({
 });
 
 export interface IGame extends Document {
+    _id: mongoose.Types.ObjectId;
     title: string;
     genre: IGenre['_id'];
     releaseDate: Date;
@@ -60,3 +61,25 @@ export const getGamesByMinimumAge = (age: number) =>{
         minimumAge: {$gte: age}
     });
 };
+
+export const getGamesByGenreName = async (genreName : string) => {
+    const games = await GameModel.aggregate([
+        {
+            $lookup: {
+                from: GenreModel.collection.name, 
+                localField: 'genre',
+                foreignField: '_id',
+                as: 'genreData'
+            }
+        },
+        {
+            $match: { 'genreData.name': genreName }
+        },
+        {
+            $unwind: '$genreData'
+        }
+    ]);
+
+    return games;
+};
+

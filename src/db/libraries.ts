@@ -60,3 +60,30 @@ export const addGame = async (libraryId: string, gameId: string): Promise<void> 
         console.log(error);
     }
 };
+
+export const removeGame = async (libraryId: string, gameId: string): Promise<void> => {
+    try {
+        const library = await LibraryModel.findById(libraryId);
+
+        if (!library) {
+            console.log("Library not found");
+            return;
+        }
+
+        const gameIndex = library.games.findIndex(id => id.toString() === gameId);
+
+        if (gameIndex === -1) {
+            console.log("Game not found in library");
+            return;
+        }
+
+        library.games.splice(gameIndex, 1);
+
+        await library.save();
+        console.log("Game removed from library successfully");
+
+    } catch (error) {
+        console.error("Error removing game from library:", error);
+    }
+};
+

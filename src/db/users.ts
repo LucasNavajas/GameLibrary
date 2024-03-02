@@ -9,7 +9,12 @@ const UserSchema = new mongoose.Schema({
         salt: {type: String, select: false},
         sessionToken: {type: String, select:false}
    },
-   library: { type: Schema.Types.ObjectId, ref: 'Library' }
+   library: { type: Schema.Types.ObjectId, ref: 'Library' },
+   preferredGenres: [{ type: String }],
+    preferredAgeRange: { 
+        min: { type: Number, min: 0 },
+        max: { type: Number, max: 18 }
+    }
 });
 
 export interface IUser extends Document {
@@ -21,6 +26,11 @@ export interface IUser extends Document {
         sessionToken: string;
     };
     library: ILibrary['_id'];
+    preferredGenres: string[];
+    preferredAgeRange?: {
+        min: number;
+        max: number;
+    };
 }
 
 export const UserModel = mongoose.model("User", UserSchema);
@@ -49,3 +59,4 @@ export const deleteUserById = async (userId: string) => {
     await LibraryModel.deleteOne({ user: userId });
 };
 export const updateUserById = (id: string, values: Record<string, any>) => UserModel.findByIdAndUpdate(id, values);
+

@@ -2,17 +2,17 @@ import mongoose, { Schema, Document } from "mongoose";
 import { GameModel } from "./games";
 const ObjectId = mongoose.Types.ObjectId;
 
-const LibrarySchema = new mongoose.Schema({
+const LibrarySchema = new mongoose.Schema({ //Definition of library schema for the db
     games: [{ type: Schema.Types.ObjectId, ref: 'Game' }] 
 });
 
-export interface ILibrary extends Document {
+export interface ILibrary extends Document { //Definition of the interface for type safety
     games: mongoose.Types.Array<Schema.Types.ObjectId>;
 }
 
-export const LibraryModel = mongoose.model<ILibrary>("Library", LibrarySchema);
+export const LibraryModel = mongoose.model<ILibrary>("Library", LibrarySchema); //Library Model for CRUD operations
 
-export const getGames = async (libraryId : string): Promise<mongoose.Types.Array<Schema.Types.ObjectId>> => {
+export const getGames = async (libraryId : string): Promise<mongoose.Types.Array<Schema.Types.ObjectId>> => { //Get all games ids stored in the library
     try{
         const library = await LibraryModel.findById(libraryId);
 
@@ -30,7 +30,7 @@ export const getGames = async (libraryId : string): Promise<mongoose.Types.Array
     }
 };
 
-export const addGame = async (libraryId: string, gameId: string): Promise<void> => {
+export const addGame = async (libraryId: string, gameId: string): Promise<void> => { //Add a game to the library through its id
     try {
         const library = await LibraryModel.findById(libraryId);
 
@@ -61,7 +61,7 @@ export const addGame = async (libraryId: string, gameId: string): Promise<void> 
     }
 };
 
-export const removeGame = async (libraryId: string, gameId: string): Promise<void> => {
+export const removeGame = async (libraryId: string, gameId: string): Promise<void> => { //Remove a game from the library through its id
     try {
         const library = await LibraryModel.findById(libraryId);
 

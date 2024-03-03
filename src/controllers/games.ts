@@ -2,16 +2,16 @@ import express from "express";
 
 import {CreateGame, getGames, getGameById, deleteGameById, getGamesByGenre, getGamesByMinimumAge, getGamesFromDateBackwards, getGamesFromDateOnwards, getMultiplayerGames, getSingleplayerGames } from "../db/games";
 
-
+//Methods related to the game instances
 export const newGame = async (req: express.Request, res: express.Response) =>{
     const { title, genre, releaseDate, description, multiplayer, picture, minimumAge } = req.body;
 
-    if (!title || !genre || !releaseDate || !description || multiplayer === undefined || !minimumAge) {
+    if (!title || !genre || !releaseDate || !description || multiplayer === undefined || !minimumAge) { //Check all the required values
         return res.status(400).json({ message: "Missing required fields" });
     }
 
     try {
-        const game = await CreateGame({ title, genre, releaseDate, description, multiplayer, picture, minimumAge });
+        const game = await CreateGame({ title, genre, releaseDate, description, multiplayer, picture, minimumAge }); //Create the game through GameModel.CreateGame
         return res.status(201).json(game);
     } catch (error) {
         console.error(error);
@@ -20,7 +20,7 @@ export const newGame = async (req: express.Request, res: express.Response) =>{
 
 }
 
-export const getAllGames = async (req: express.Request, res: express.Response) =>{
+export const getAllGames = async (req: express.Request, res: express.Response) =>{ //Retrieve all games
     try{
         const games = await getGames();
         res.status(200).json(games);
@@ -29,7 +29,7 @@ export const getAllGames = async (req: express.Request, res: express.Response) =
         res.sendStatus(400);
     }
 }
-export const getGame = async (req: express.Request, res: express.Response) =>{
+export const getGame = async (req: express.Request, res: express.Response) =>{ //Get a game through its id
     try{
         const { id } = req.params;
 
@@ -41,7 +41,7 @@ export const getGame = async (req: express.Request, res: express.Response) =>{
         res.sendStatus(400);
     }
 }
-export const deleteGame = async (req: express.Request, res: express.Response) =>{
+export const deleteGame = async (req: express.Request, res: express.Response) =>{ 
     try{
         const { id } = req.params;
 
@@ -53,7 +53,7 @@ export const deleteGame = async (req: express.Request, res: express.Response) =>
         res.sendStatus(400);
     }
 }
-export const getGamesGenre = async (req: express.Request, res: express.Response) =>{
+export const getGamesGenre = async (req: express.Request, res: express.Response) =>{ //Get games of a specific genre
     try{
         const { id } = req.params;
 
@@ -65,7 +65,7 @@ export const getGamesGenre = async (req: express.Request, res: express.Response)
         res.sendStatus(400);
     }
 }
-export const getGameMinimumAge = async (req: express.Request, res: express.Response) =>{
+export const getGameMinimumAge = async (req: express.Request, res: express.Response) =>{ //Get games of a certain age interval
     try{
         const { age }= req.params;
         const numericAge = Number(age);
@@ -78,7 +78,7 @@ export const getGameMinimumAge = async (req: express.Request, res: express.Respo
         res.sendStatus(400);
     }
 }
-export const getGameMultiplayer = async (req: express.Request, res: express.Response) =>{
+export const getGameMultiplayer = async (req: express.Request, res: express.Response) =>{ //Get multiplayer games
     try{
 
         const games = await getMultiplayerGames();
@@ -89,7 +89,7 @@ export const getGameMultiplayer = async (req: express.Request, res: express.Resp
         res.sendStatus(400);
     }
 }
-export const getGameSingleplayer = async (req: express.Request, res: express.Response) =>{
+export const getGameSingleplayer = async (req: express.Request, res: express.Response) =>{ //Get singleplayer games
     try{
 
         const games = await getSingleplayerGames();
@@ -100,7 +100,7 @@ export const getGameSingleplayer = async (req: express.Request, res: express.Res
         res.sendStatus(400);
     }
 }
-export const getGamePrevDate = async (req: express.Request, res: express.Response) => {
+export const getGamePrevDate = async (req: express.Request, res: express.Response) => { //Get games whose release date is previous to the date passed as parameter
     try {
         const { date } = req.body;
         const queryDate = new Date(date);
@@ -112,7 +112,7 @@ export const getGamePrevDate = async (req: express.Request, res: express.Respons
     }
 };
 
-export const getGamePostDate = async (req: express.Request, res: express.Response) => {
+export const getGamePostDate = async (req: express.Request, res: express.Response) => { //Get games whose release date is after the date passed as parameter
     try {
         const { date } = req.body;
         const queryDate = new Date(date);

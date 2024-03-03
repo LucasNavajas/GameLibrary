@@ -1,7 +1,7 @@
 import express from "express";
 
 import { GetGenreById, CreateGenre, DeleteGenreById, GetGenres } from "../db/genres";
-
+//Generic operations related to genres
 export const getAllGenres = async (req: express.Request, res: express.Response) =>{
     try{
         const genres = await GetGenres();

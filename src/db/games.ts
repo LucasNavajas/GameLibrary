@@ -1,9 +1,9 @@
 import mongoose, {Schema, Document} from "mongoose";
 import { IGenre, GenreModel } from "./genres";
 
-const GameSchema = new mongoose.Schema({
-    title: {type: String, required: true},
-    genre: {type: Schema.Types.ObjectId, ref: 'Genre', required: true},
+const GameSchema = new mongoose.Schema({ //Game schema definition for the database in MongoDB
+    title: {type: String, required: true, unique: true}, 
+    genre: {type: Schema.Types.ObjectId, ref: 'Genre', required: true}, //genre object
     releaseDate: {type: Date, required: true},
     description: {type: String, required: true},
     multiplayer: {type: Boolean, required: true},
@@ -32,8 +32,9 @@ export interface IGame extends Document {
     minimumAge: number;
 }
 
-export const GameModel = mongoose.model<IGame>("Game", GameSchema);
+export const GameModel = mongoose.model<IGame>("Game", GameSchema); //GameModel for CRUD 
 
+//Definitions of methods used in game controller
 export const CreateGame = async (values: Record<string, any>) => {
     const game = await new GameModel(values).save();
 

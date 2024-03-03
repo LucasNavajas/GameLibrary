@@ -3,6 +3,21 @@ import { getGames, addGame, removeGame } from "../db/libraries";
 import { get } from "lodash";
 import { getUserById } from "../db/users";
 
+export const getLoggedInUserLibrary = async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+        const user = await getUserById(get(req, "identity"));
+
+        if (!user || !user.library) {
+           res.status(404).send("Library not found for the user.");
+           return; 
+        }
+        res.send(200).json(user.library);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred while fetching the library.");
+    }
+};
+
 export const getLibraryGames = async (req: express.Request, res: express.Response): Promise<void> => {
     try {
         const user = await getUserById(get(req, "identity"));

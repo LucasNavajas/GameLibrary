@@ -8,7 +8,7 @@ import games from "./games";
 
 const router = express.Router();
 
-export default (): express.Router =>{
+export default (): express.Router =>{ //Defines all the routers of the different classes
     authentication(router);
     users(router);
     libraries(router);

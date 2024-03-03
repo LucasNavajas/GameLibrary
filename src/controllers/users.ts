@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import { deleteUserById, getUserById, getUsers, UserModel } from "../db/users";
 import { GameModel, IGame } from '../db/games';
 import { GenreModel } from "../db/genres";
-import { ILibrary } from "../db/libraries";
 
 export const getAllUsers = async (req: express.Request, res: express.Response) =>{
     try{
@@ -50,7 +49,8 @@ export const updateUser = async (req: express.Request, res: express.Response) =>
     }
 }
 
-export const updateUserPreferences = async (req: express.Request, res: express.Response) => {
+export const updateUserPreferences = async (req: express.Request, res: express.Response) => { 
+    //It updates the user preferences so the API can recommend new games to the user that are not in their library
     try {
         const { id } = req.params; 
         const { preferredGenres, preferredAgeRange } = req.body; 
@@ -74,25 +74,37 @@ export const updateUserPreferences = async (req: express.Request, res: express.R
 };
 
 export const getRecommendations = async (req: express.Request, res: express.Response) => {
+    //Get the recommendations based on the preferences of the user
     try {
-        const { userId } = req.params;
-        const user = await UserModel.findById(userId).populate({
+        const { id } = req.params;
+        const user = await UserModel.findById(id).populate({
             path: 'library',
             populate: { path: 'games' }
-          });
-          
+        });
 
         if (!user) {
             return res.status(404).send('User not found');
         }
+
+        // Extract the preferred genres and the preferred age range from the user
         const preferredGenres = user.preferredGenres;
+        const preferredAgeRange = user.preferredAgeRange;
         const userLibraryGameIds = (user.library as any).games.map((game: IGame) => game._id);
+
+        // Find the genres that match the user's preferred genres
         const genres = await GenreModel.find({ name: { $in: preferredGenres } });
         const genreIds = genres.map(genre => genre._id);
+
+        // Construct the aggregation pipeline
         const recommendedGames = await GameModel.aggregate([
             {
                 $match: {
                     genre: { $in: genreIds },
+                    // Ensure the game's minimum age is within the user's preferred age range
+                    minimumAge: { 
+                        $gte: preferredAgeRange?.min || 0, 
+                        $lte: preferredAgeRange?.max || 18
+                    },
                 }
             },
             {
@@ -113,7 +125,6 @@ export const getRecommendations = async (req: express.Request, res: express.Resp
                 }
             }
         ]);
-        
 
         return res.json(recommendedGames);
     } catch (error) {

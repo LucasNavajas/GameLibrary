@@ -2,7 +2,7 @@ import express from "express";
 
 import * as GameController from "../controllers/games";
 
-export default(router: express.Router) =>{
+export default(router: express.Router) =>{ //Router with all the endpoints related to games
     router.post("/games", GameController.newGame);
     router.get("/games", GameController.getAllGames);
     router.get("/games/:id", GameController.getGame);

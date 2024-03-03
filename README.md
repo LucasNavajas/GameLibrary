@@ -1,0 +1,7 @@
+EN - This project is an API developed in TypeScript with Express and Node.js and using a MongoDB database mounted online in AtlasDB. Basically, there are users, each one with its own library, in which they can add games of a pool in the database.
+Each user has to register itself with just an email, password and a username. Before making any request related to its library, the user must be logged in. The app saves a cookie with the session token of the user logged in.
+The games have different attributes, such as title, genre, minimum age, release date, etc. The users also have game preferences, defining a preferred genre and a minimum/maximum age. They can consult the API for recommendations based on their preferences.
+
+ES - Este proyecto es una API desarrollada en TypeScript con Express y Node.js, utilizando una base de datos MongoDB montada en línea en AtlasDB. Básicamente, hay usuarios, cada uno con su propia biblioteca, en la que pueden agregar juegos de una piscina en la base de datos.
+Cada usuario debe registrarse con solo un correo electrónico, contraseña y un nombre de usuario. Antes de realizar cualquier solicitud relacionada con su biblioteca, el usuario debe iniciar sesión. La aplicación guarda una cookie con el token de sesión del usuario conectado.
+Los juegos tienen diferentes atributos, como título, género, edad mínima, fecha de lanzamiento, etc. Los usuarios también tienen preferencias de juego, definiendo un género preferido y una edad mínima/máxima. Pueden consultar la API para obtener recomendaciones basadas en sus preferencias.
